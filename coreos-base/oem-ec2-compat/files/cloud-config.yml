@@ -2,6 +2,19 @@
 
 coreos:
     units:
+      - name: metadata-zeroconf-route.service
+        command: restart
+        runtime: yes
+        content: |
+          [Unit]
+          Description=Add zeroconf route
+          Requires=systemd-networkd.service
+          After=systemd-networkd.service
+
+          [Service]
+          Type=oneshot
+          StandardOutput=journal+console
+          ExecStart=/usr/bin/ip route add 169.254.0.0/16 dev ens3 scope link
       - name: ec2-ssh-key.service
         command: restart
         runtime: yes
